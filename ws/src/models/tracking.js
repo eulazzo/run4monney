@@ -41,4 +41,4 @@ const Tracking = new mongoose.Schema({
   },
 });
 
-export default mongoose.model("Tracking", Tracking);
+module.exports = mongoose.model("Tracking", Tracking);

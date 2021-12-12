@@ -6,6 +6,8 @@ const bcrypt = require("bcrypt");
 const moment = require("moment");
 const aws = require("../services/aws.js");
 
+const User = require("../models/user");
+
 const router = express.Router();
 
 router.post("/", async (req, res) => {
@@ -36,8 +38,18 @@ router.post("/", async (req, res) => {
         }
       }
 
-      res.status(200).json({ message: "Upload com sucesso!" });
+      const password = await bcrypt.hash(req.body.password, 10);
+
       //CREATE USER
+      const newUser = await new User({
+        ...req.body,
+        _id: userId,
+        password,
+        photo,
+      }).save();
+
+      res.status(200).json({newUser})
+
     } catch (err) {
       res.json({ err: true, message: err.message });
     }
